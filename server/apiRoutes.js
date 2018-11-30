@@ -1,23 +1,31 @@
 const sql = require("mssql");
-const dbConfig = {
-    user:  "",
-    password: "",
-    server: "",
-    database: ""
+const dbconfig = require('./dbconfig').dbconfig;
+
+function runQuery(res, query){
+    new sql.ConnectionPool(dbconfig).connect().then(pool => {
+        return query(pool)
+    }).then(result => {
+        res.send(result);
+        console.dir(result);
+    }).catch(err => {
+        res.send(err);
+        console.dir(err);
+    })
 }
 module.exports = {
   setupRoutes(app){
     app.get('/api/users', function(req, res) {
-      sql.connect(dbConfig).then(pool => {
-          return pool.request()
-          .input('value', sql.Int, 100)
-          .query("select * from gitSteamed.Reviews where Helpful > @value")
-      }).then(result => {
-          res.send(result);
-          console.dir(result);
-      }).catch(err => {
-          console.dir(err);
-      })
+      var resultCount = 10;
+      var pageNumber = 1;
+      if(req.query.pageNumber) pageNumber = req.query.pageNumber;
+      if(req.query.resultCount) resultCount = req.query.resultCount;
+      runQuery(res, pool => {
+        return pool.request()
+          .input('LookupString', sql.NVarChar, req.query.name)
+          .input('ResultCount', sql.Int, resultCount)
+          .input('PageNumber', sql.Int, pageNumber)
+          .execute("gitSteamed.SearchUser")
+      });
     })
   }
 }

@@ -37,7 +37,6 @@
 
 body, html{
     font-family: 'Source Sans Pro', sans-serif;
-    height:100%;
 }
 
 h1,h2{
@@ -83,7 +82,7 @@ a:hover{
 
 #usersList{
     margin-top:100%;
-    transition:.3s margin;
+    transition:.3s margin, .3s visibility;
 }
 #usersList.loaded{
     margin-top:0%;
