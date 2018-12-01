@@ -21,7 +21,7 @@
           )
             .row
               .col-10 {{ user.Username }}
-              a.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center View Profile
+              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/user/'+user.Username }") View Profile
         ul(v-if="errors && errors.length")
           li(v-for="error of errors") {{ error.message }}
 </template>
@@ -36,16 +36,28 @@ export default {
   methods: {
     search () {
       var loader = this.loadMore
+      console.log("no more results: ", this.outOfResults)
       if(this.searchText != this.lastSearchText){
-        this.page = 0
-        this.loadNew
+        this.page = 1
+        loader = this.loadNew
       }
+      else if(this.outOfResults) {
+        console.log("Out of results, ignoring")
+        return;
+      }
+
       var searchText = `/api/users?name=${this.searchText}&pageNumber=${this.page}&resultCount=${this.numberToLoad}`
       console.log(searchText)
-      this.searching = true;
+      this.searching = true
+
       axios.get(searchText)
+      
         .then(response => {
           this.searching = false;
+          if (response.data.recordsets[0].length < this.numberToLoad){
+            console.log('No more results')
+            this.outOfResults = true
+          }
           loader(response)
           this.lastSearchText = this.searchText
           window.setTimeout(() => this.loaded = true, 10)
@@ -55,7 +67,7 @@ export default {
         })
     },
     loadMore (response) {
-      this.users.push(response.data.recordsets[0])
+      this.users = this.users.concat(response.data.recordsets[0])
     },
     loadNew (response) {
       this.users = response.data.recordsets[0]
@@ -66,9 +78,9 @@ export default {
       var height = d.offsetHeight
 
       if (offset + loadStartPadding >= height) {
-        if(!this.searching) {
-          this.page++;
-          this.search();
+        if (!this.searching) {
+          this.page++
+          this.search()
         }
       }
     }
@@ -81,6 +93,7 @@ export default {
   },
   data () {
     return {
+      outOfResults: false,
       lastSearchText: '',
       searchText: '',
       searching: false,

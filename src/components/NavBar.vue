@@ -1,26 +1,17 @@
-<template>
-  <nav class="font-weight-bold ft-medium navbar bg-base0">
-    <a class="navbar-brand color-base7 text-lg font-weight-bold" href="#">
-      <span class="color-base8">Git</span>Steam'd
-    </a>
-
-    <ul class="nav ml-auto mt-lg-0">
-      <li class="nav-item active">
-        <a
-          class="nav-link color-base7 h-bg-base6 h-color-base2"
-          v-on:click="setActive('Users')"
-          href="#"
-        >Users</a>
-      </li>
-      <li class="nav-item active">
-        <a
-          class="nav-link color-base7 h-bg-base6 h-color-base2"
-          v-on:click="setActive('Games')"
-          href="#"
-        >Games</a>
-      </li>
-    </ul>
-  </nav>
+<template lang="pug">
+  nav.font-weight-bold.ft-medium.navbar.bg-base0
+    router-link.navbar-brand.color-base7.text-lg.font-weight-bold(:to="{path: '/'}")
+      span.color-base8 Git
+      span Steam'd
+    ul.nav.ml-auto.mt-lg-0
+      li.nav-item.active
+        router-link.nav-link.color-base7.h-bg-base6.h-color-base2(
+          :to="{path: '/userSearch'}"
+        ) Users
+      li.nav-item.active
+        router-link.nav-link.color-base7.h-bg-base6.h-color-base2(
+          :to="{path: '/'}"
+        ) Games
 </template>
 
 <script>
