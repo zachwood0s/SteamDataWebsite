@@ -6,6 +6,14 @@
         h1.color-base1.font-weight-bold.text-center.w-100 {{name}}
           a.ml-1.pb-1(v-if="stats && stats.URL" v-bind:href="stats.URL")
             img(src="https://cdn0.iconfinder.com/data/icons/social-15/200/steam-128.png" width="30" height="30") 
+      .row.justify-content-md-center.ft-medium
+        span.mx-1.color-base11.font-weight-bold(
+          v-if="stats && stats.Price"
+        ) ${{stats.Price}}
+        span.badge.badge-pill.bg-base13.color-base7.mx-1.my-auto(
+          v-if="genres && genres.length" 
+          v-for="genre of genres"
+        ) {{genre.Name}}
       .row.justify-content-md-center.mb-5(v-if="charts && charts.length")
         .col-8
           .carousel.slide.mt-3#carousel(data-ride='carousel')
@@ -81,6 +89,23 @@
                 span(v-if="user.TimePlayedForever != 1") s
               router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/user/'+user.Username }") View Profile
 
+      .row-justify-content-md-center.mt-5
+        a(href="#bundlesList" data-toggle="collapse")
+          h2.color-base1.font-weight-bold.text-center.w-100 Bundles containing {{name}}
+      .row.justify-content-md-center.mb-5.collapse.show#bundlesList
+        ul.list-group.col-md(
+          v-if="bundles && bundles.length"
+        )
+          li.bg-base5.list-group-item.my-1(
+            v-for="bundle of bundles"
+          )
+            .row
+              .col-7 {{ bundle.Name.substring(0, 50) }} 
+                span(v-if="bundle.Name.length > 50") ...
+              .col-3.font-weight-bold ${{ bundle.DiscountPrice.toFixed(2) }} 
+                span.color-base11.ml-1 -{{ Math.round((bundle.FinalPrice - bundle.DiscountPrice) / bundle.FinalPrice * 100) }}% off
+              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/bundle/'+bundle.ItemID }") View Bundle
+
       .row.justify-content-md-center.mt-5
         a(href="#reviewsList" data-toggle="collapse")
           h2.color-base1.font-weight-bold.text-center.w-100 {{name}}'s Reviews
@@ -137,7 +162,6 @@ export default {
   methods: {
     async loadData () {
       try{
-        console.log(`/api/userReviews?username=${this.username}&resultCount=0`)
         const reviewsPromise = axios(`/api/gameReviews?itemID=${this.itemID}&resultCount=0`)
         const bundlesPromise = axios(`/api/gameBundles?itemID=${this.itemID}&resultCount=0`)
         const statsPromise = axios(`/api/gameStats?itemID=${this.itemID}`)
@@ -164,12 +188,50 @@ export default {
             this.totalUsers = totalUsers.data.recordsets[0][0].TotalUsers
           }
           this.charts = [
+            this.reviewsOverTimeDataset(),
+            this.gameRecommendationDataset()
           ]
         });
       } catch (e) {
         console.log(e)
       }
     },
+    reviewsOverTimeDataset () {
+      var selColors = colorConfig.getRbgColorsBetween(8,9)
+      var years = this.reviews.map(i => i.PostedOn.substring(i.PostedOn.indexOf(',')+1).trim()).sort()
+      var uniqueYears = {};
+      for(var year of years){
+        if(year in uniqueYears) uniqueYears[year]++
+        else uniqueYears[year] = 1
+      }
+      return {
+        name: "GamesReviewsOverTime",
+        data: {
+          labels: Object.keys(uniqueYears), 
+          datasets: [{
+            label: "Posts",
+            data: Object.keys(uniqueYears).map(i => uniqueYears[i]),
+            fill: false,
+            backgroundColor: selColors.map(i => colorConfig.rgbToRgbaString(i, .7))
+          }]
+        }
+      }
+    },
+    gameRecommendationDataset () {
+      var recommendCount = this.reviews.filter(i => i.Recommend).length
+      var selColors = colorConfig.getRbgColorsBetween(10,12)
+      return {
+        name: "GameRecommendRate",
+        data: {
+          labels: ["Recommended", "Not Recommended"],
+          datasets: [{
+            label: "Recommendations",
+            data: [recommendCount, this.reviews.length - recommendCount],
+            backgroundColor: selColors.map(i => colorConfig.rgbToRgbaString(i, 1))
+          }]
+        }
+      }
+    }
   },
   created () {
     this.loadData();

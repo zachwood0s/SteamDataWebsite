@@ -108,6 +108,58 @@ charts["UsersGameGenre"] = function (ctx, data) {
     }
   });
 }
+
+charts["GamesReviewsOverTime"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'Reviews Over Time'
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  });
+}
+charts["GameRecommendRate"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      title: {
+        display: true,
+        text: 'Game Recommendations'
+      },
+      scales: {
+        xAxes: [{
+          display: false
+        }],
+        yAxes: [{
+          display: false,
+        }]
+      },
+    }
+  });
+}
 function loadChart(name, ctx, datasets) {
   charts[name](ctx, datasets)
 }

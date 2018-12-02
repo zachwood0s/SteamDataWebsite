@@ -12,6 +12,8 @@ import UpdateBundle from '@/components/UpdateBundle'
 import AddGenre from '@/components/AddGenre'
 import GameSearch from '@/components/GameSearch'
 import Game from '@/components/Game'
+import BundleSearch from '@/components/BundleSearch'
+import Bundle from '@/components/Bundle'
 
 Vue.use(Router)
 
@@ -77,6 +79,16 @@ export default new Router({
       path: '/game/:itemID',
       name: 'Game',
       component: Game
+    },
+    {
+      path: '/bundleSearch',
+      name: 'Bundle Search',
+      component: BundleSearch
+    },
+    {
+      path: '/bundle/:itemID',
+      name: 'Bundle',
+      component: Bundle
     }
   ]
 })
