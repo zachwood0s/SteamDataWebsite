@@ -56,6 +56,9 @@
               .col-3.font-weight-bold 2 Week Playtime: {{ game.Week2PlayTime }}
               .col-3.font-weight-bold Total Playtime: {{ game.TotalPlayTime }}
               router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/game/'+game.ItemID }") View Game
+        h4(
+          v-else
+        ) {{username}} doesn't have any games
 
 </template>
 
@@ -78,9 +81,9 @@ export default {
   methods: {
     async loadData () {
       try{
-        console.log(`/api/userReviews?username=${this.username}&resultCount=1000`)
-        const reviewsPromise = axios(`/api/userReviews?username=${this.username}`)
-        const gamesPromise = axios(`/api/userGames?username=${this.username}`)
+        console.log(`/api/userReviews?username=${this.username}&resultCount=0`)
+        const reviewsPromise = axios(`/api/userReviews?username=${this.username}&resultCount=0`)
+        const gamesPromise = axios(`/api/userGames?username=${this.username}&resultCount=0`)
         const statsPromise = axios(`/api/userStats?username=${this.username}`)
 
         Promise.all([reviewsPromise, gamesPromise, statsPromise]).then(result => {
