@@ -9,6 +9,8 @@ import AdminReviews from '@/components/AdminReviews'
 import AdminUsers from '@/components/AdminUsers'
 import GameSearch from '@/components/GameSearch'
 import Game from '@/components/Game'
+import BundleSearch from '@/components/BundleSearch'
+import Bundle from '@/components/Bundle'
 
 Vue.use(Router)
 
@@ -59,6 +61,16 @@ export default new Router({
       path: '/game/:itemID',
       name: 'Game',
       component: Game
+    },
+    {
+      path: '/bundleSearch',
+      name: 'Bundle Search',
+      component: BundleSearch
+    },
+    {
+      path: '/bundle/:itemID',
+      name: 'Bundle',
+      component: Bundle
     }
   ]
 })

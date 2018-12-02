@@ -170,15 +170,16 @@ export default {
     },
     loadGameRecommendDataset(){
       var numUncatReview = this.stats.ReviewCount - this.stats.FunnyCount - this.stats.HelpfulCount
-      var selColors = colorConfig.getRbgColorsBetween(8,10)
+      var selColors = colorConfig.getRbgColorsBetween(8,11)
       return{
         name:"UsersGameRecommendRatio",
         data:{
-          labels: ["Games Recommended","Not Recommended"],
+          labels: ["Games Recommended", "Not Recommended","Not Reviewed"],
           datasets: [{
               label: "User Recommendations",
               data: [
                 this.stats.RecommendedCount,
+                this.stats.ReviewCount - this.stats.RecommendedCount,
                 this.totalGames - this.stats.RecommendedCount],
               backgroundColor: selColors.map(i => colorConfig.rgbToRgbaString(i, 1))
           }]
