@@ -166,7 +166,7 @@ module.exports = {
           .input('Price', sql.Int, req.query.price)
           .input('URL', sql.NVarChar, req.query.url)
           .input('Name', sql.NVarChar, req.query.name)
-          .execute("gitSteamed.AddUser")
+          .execute("gitSteamed.AddItem")
       })
     })
 
