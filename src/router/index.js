@@ -10,6 +10,7 @@ import AdminUsers from '@/components/AdminUsers'
 import GameSearch from '@/components/GameSearch'
 import Game from '@/components/Game'
 
+Vue.use(Router)
 
 export default new Router({
   mode: 'history',
