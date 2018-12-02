@@ -1,5 +1,4 @@
 
-(function () {
 
     const config = {
         colorsHex: [],
@@ -44,9 +43,9 @@
         newStyleSheet.innerHTML = styleText;
         document.getElementsByTagName('head')[0].appendChild(newStyleSheet);
     }
-
-
+    createCssColors();
+/*
     window.onload = function () {
         createCssColors();
     }
-})();
+    */
