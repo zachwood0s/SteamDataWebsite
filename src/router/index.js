@@ -3,10 +3,13 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import UserSearch from '@/components/UserSearch'
 import User from '@/components/User'
+import Login from '@/components/Login'
 import Admin from '@/components/Admin'
-import AdminGames from '@/components/AdminGames'
-import AdminReviews from '@/components/AdminReviews'
-import AdminUsers from '@/components/AdminUsers'
+import AddGame from '@/components/AddGame'
+import ArchiveReviews from '@/components/ArchiveReviews'
+import AddUser from '@/components/AddUser'
+import UpdateBundle from '@/components/UpdateBundle'
+import AddGenre from '@/components/AddGenre'
 import GameSearch from '@/components/GameSearch'
 import Game from '@/components/Game'
 
@@ -31,6 +34,11 @@ export default new Router({
       component: User
     },
     {
+      path: '/admin/login',
+      name: 'Login',
+      component: Login
+    },
+    {
       path: '/admin',
       name: 'Admin',
       component: Admin
@@ -38,17 +46,27 @@ export default new Router({
     {
       path: '/admin/add/user',
       name: 'Add User',
-      component: AdminUsers
+      component: AddUser
     },
     {
-      path: '/admin/games',
+      path: '/admin/add/item',
       name: 'Modify Games',
-      component: AdminGames
+      component: AddGame
     },
     {
-      path: '/admin/reviews',
+      path: '/admin/archive/reviews',
       name: 'Modify Reviews',
-      component: AdminReviews
+      component: ArchiveReviews
+    },
+    {
+      path: '/admin/add/genre',
+      name: 'Add Game Genre',
+      component: AddGenre
+    },
+    {
+      path: '/admin/update/bundle',
+      name: 'Update Bundle Price',
+      component: UpdateBundle
     },
     {
       path: '/gameSearch',

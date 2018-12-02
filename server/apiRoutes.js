@@ -148,5 +148,16 @@ module.exports = {
           .execute("gitSteamed.GetGameGenres")
       })
     })
+
+    app.post('/api/admin/login', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('username', sql.NVarChar, req.query.username)
+          .input('password', sql.NVarChar, req.query.password)
+          .output('exists', sql.Int)
+          .execute("gitSteamed.Login")
+      })
+    })
+
   }
 }
