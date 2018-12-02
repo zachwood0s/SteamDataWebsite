@@ -11,7 +11,7 @@
              <i style="margin: 5px;" class="far fa-user fa-7x"></i>
            </div>
           <div class="card-body align-items-center d-flex justify-content-center">
-           <a href="{path: '/admin/add/user}" class="btn btn-primary">Add User</a>
+           <router-link class="btn btn-secondary" v-bind:to="{path: '/admin/add/user'}">Add User</router-link>
            </div>
          </div>
         </div>
@@ -22,7 +22,7 @@
              <i style="margin: 5px;" class="fas fa-gamepad fa-7x"></i>
            </div>
            <div class="card-body align-items-center d-flex justify-content-center">
-             <a href="#" class="btn btn-primary">Add Item</a>
+             <router-link class="btn btn-secondary" v-bind:to="{path: '/admin/add/item'}">Add Item</router-link>
            </div>
          </div>
         </div>
@@ -33,7 +33,7 @@
              <i style="margin: 5px;" class="fas fa-book-open fa-7x"></i>
           </div>
           <div class="card-body align-items-center d-flex justify-content-center">
-             <a href="#" class="btn btn-primary">Add Game Genre</a>
+              <router-link class="btn btn-secondary" v-bind:to="{path: '/admin/add/genre'}">Add Game Genre</router-link>
            </div>
          </div>
         </div>
@@ -44,7 +44,7 @@
              <i style="margin: 5px;" class="far fa-comments fa-7x"></i>
           </div>
           <div class="card-body align-items-center d-flex justify-content-center">
-             <a href="#" class="btn btn-primary">Archive Review</a>
+             <router-link class="btn btn-secondary" v-bind:to="{path: '/admin/archive/reviews'}">Archive Review</router-link>
            </div>
          </div>
         </div>
@@ -55,7 +55,7 @@
               <i style="margin: 5px;" class="fas fa-dollar-sign fa-7x"></i>
           </div>
           <div class="card-body align-items-center d-flex justify-content-center">
-             <a href="#" class="btn btn-primary">Update Bundle Price</a>
+             <router-link class="btn btn-secondary" v-bind:to="{path: '/admin/update/bundle'}">Update Bundle Price</router-link>
            </div>
          </div>
         </div>

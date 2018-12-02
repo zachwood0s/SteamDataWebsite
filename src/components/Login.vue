@@ -2,14 +2,28 @@
   <div>
     <NavBar/>
     <div class="alert alert-danger" role="alert" v-if="!valid">
-          Incorrect Login Credentials
-      </div>
-    	<div id="login">
-        <h1>Login</h1>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" />
-        <input type="password" name="password" v-model="input.password" placeholder="Password" />
-        <button type="button" v-on:click="login()">Login</button>
+      Incorrect Login Credentials
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+          <h1 style="text-align: center;">Admin Login</h1>
+          <form>
+          	<div class="form-group" id="login">
+              <label for="username">Username:</label>
+              <input class="form-control" type="text" name="username" v-model="input.username" />
+            </div>
+            <div class="form-group" id="login">
+              <label for="password">Password:</label>
+              <input class="form-control" type="password" name="password" v-model="input.password" />
+            </div>
+              <button class="btn btn-secondary" type="button" v-on:click="login()">Login</button>
+          </form>
+          </div>
+          <div class="col-sm"></div>
+        </div>
+      </div>
   </div>
 </template>
 
