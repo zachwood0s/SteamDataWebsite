@@ -47,18 +47,20 @@
           .card.bg-base6.h-100
             .card-body
               h2.text-center.font-weight-bold {{ Math.round(stats.TotalPlayTime2Weeks / 24 * 100)/100}} days
+              h6.text-center ({{ Math.round(stats.TotalPlayTime2Weeks / 8760 *100) / 100 }} years)
               h5.text-center 2 Week Playtime
         .col-3(v-if="stats && stats.UsersOwned")
           .card.bg-base6.h-100
             .card-body
               h2.text-center.font-weight-bold {{ stats.UsersOwned }}
-              h6.text-center ({{ Math.round(stats.UsersOwned / totalUsers * 10000)/100}}% of players)
               h5.text-center Purchases
+              h6.text-center ({{ Math.round(stats.UsersOwned / totalUsers * 10000)/100}}% of players)
         .col-3(v-if="stats && stats.UsersPlayed")
           .card.bg-base6.h-100
             .card-body
               h2.text-center.font-weight-bold {{ stats.UsersPlayed }} 
               h5.text-center Players
+              h6.text-center ({{ Math.round(stats.UsersPlayed / totalUsers * 10000)/100}}% of players)
 
       .row.justify-content-md-center.mt-5
         a(href="#topPlayers" data-toggle="collapse")
@@ -73,8 +75,10 @@
             .row
               .col-4 {{ user.Username.substring(0, 28) }} 
                 span(v-if="user.Username.length > 28") ...
-              .col-3.font-weight-bold 2 Week Playtime: {{ user.TimePlayed2Weeks }}
-              .col-3.font-weight-bold Total Playtime: {{ user.TimePlayedForever }}
+              .col-3.font-weight-bold Two Week Playtime: {{ user.TimePlayed2Weeks }} hour
+                span(v-if="user.TimePlayed2Weeks != 1") s
+              .col-3.font-weight-bold Total Playtime: {{ user.TimePlayedForever }} hour
+                span(v-if="user.TimePlayedForever != 1") s
               router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/user/'+user.Username }") View Profile
 
       .row.justify-content-md-center.mt-5
@@ -143,7 +147,9 @@ export default {
 
         Promise.all([reviewsPromise, bundlesPromise, statsPromise, genrePromise, usersPromise, totalUsersPromise]).then(result => {
           const [reviews, bundles, stats, genres, users, totalUsers] = result
-          this.reviews = reviews.data.recordsets[0]
+          if(reviews.data.recordsets){
+            this.reviews = reviews.data.recordsets[0]
+          }
           if(bundles.data.recordsets){
             this.bundles = bundles.data.recordsets[0]
           }

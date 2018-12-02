@@ -133,11 +133,13 @@ export default {
 
         Promise.all([reviewsPromise, gamesPromise, statsPromise, genrePromise]).then(result => {
           const [reviews, games, stats, genres] = result
-          this.reviews = reviews.data.recordsets[0]
-          this.games = games.data.recordsets[0]
-          this.stats = stats.data.recordsets[0][0]
-          this.genres = genres.data.recordsets[0]
-          this.totalGames = games.data.output.ReturnedCount
+          if(reviews.data.recordsets) this.reviews = reviews.data.recordsets[0]
+          if(games.data.recordsets) this.games = games.data.recordsets[0]
+          if(stats.data.recordsets && 
+             stats.data.recordsets[0] && 
+             stats.data.recordsets[0][0]) this.stats = stats.data.recordsets[0][0]
+          if(genres.data.recordsets) this.genres = genres.data.recordsets[0]
+          if(games.data.output.ReturnedCount) this.totalGames = games.data.output.ReturnedCount
           this.charts = [
             this.loadTopGamesDataset(),
             this.loadGameRecommendDataset(),
