@@ -3,8 +3,11 @@ import Router from 'vue-router'
 import Main from '@/components/Main'
 import UserSearch from '@/components/UserSearch'
 import User from '@/components/User'
-
-Vue.use(Router)
+import Admin from '@/components/Admin'
+import AdminGames from '@/components/AdminGames'
+import AdminReviews from '@/components/AdminReviews'
+import AdminUsers from '@/components/AdminUsers'
+ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
@@ -23,6 +26,26 @@ export default new Router({
       path: '/user/:username',
       name: 'User',
       component: User
-    }
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin
+    },
+    {
+      path: '/admin/add/user',
+      name: 'Add User',
+      component: AdminUsers
+    },
+    {
+      path: '/admin/games',
+      name: 'Modify Games',
+      component: AdminGames
+    },
+    {
+      path: '/admin/reviews',
+      name: 'Modify Reviews',
+      component: AdminReviews
+    },
   ]
 })

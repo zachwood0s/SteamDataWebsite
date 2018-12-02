@@ -24,6 +24,7 @@ module.exports = {
           .input('LookupString', sql.NVarChar, req.query.name)
           .input('ResultCount', sql.Int, resultCount)
           .input('PageNumber', sql.Int, pageNumber)
+          .output('ReturnedCount', sql.Int)
           .execute("gitSteamed.SearchUser")
       });
     })
