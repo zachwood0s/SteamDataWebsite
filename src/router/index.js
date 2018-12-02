@@ -7,7 +7,9 @@ import Admin from '@/components/Admin'
 import AdminGames from '@/components/AdminGames'
 import AdminReviews from '@/components/AdminReviews'
 import AdminUsers from '@/components/AdminUsers'
- Vue.use(Router)
+import GameSearch from '@/components/GameSearch'
+import Game from '@/components/Game'
+
 
 export default new Router({
   mode: 'history',
@@ -47,5 +49,15 @@ export default new Router({
       name: 'Modify Reviews',
       component: AdminReviews
     },
+    {
+      path: '/gameSearch',
+      name: 'Game Search',
+      component: GameSearch
+    },
+    {
+      path: '/game/:itemID',
+      name: 'Game',
+      component: Game
+    }
   ]
 })

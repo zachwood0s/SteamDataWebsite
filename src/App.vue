@@ -3,8 +3,12 @@
 </template>
 
 <script>
+import colors from "../static/js/colorSetup.js"
 export default {
-  name: 'App'
+  name: 'App',
+  beforeCreate(){
+    colors.createCssColors()
+  }
 }
 </script>
 
