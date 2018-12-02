@@ -187,26 +187,61 @@ module.exports = {
     })
 
     //Admin Routes
-    app.post('/api/admin/addUsers/', function(req, res) {
+    app.get('/api/admin/login', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('username', sql.NVarChar, req.query.username)
+          .input('password', sql.NVarChar, req.query.password)
+          .output('exists', sql.Int)
+          .execute("gitSteamed.Login")
+      })
+    })
+    app.post('/api/admin/add/user', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('Username', sql.NVarChar, req.query.username)
           .input('ItemCount', sql.Int, req.query.itemCount)
           .input('URL', sql.NVarChar, req.query.url)
+          .output('added', sql.Int)
           .execute("gitSteamed.AddUser")
       })
     })
-    app.post('/api/admin/addItem/', function(req, res) {
+    app.post('/api/admin/add/item/', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('Genre', sql.NVarChar, req.query.genre)
           .input('Price', sql.Int, req.query.price)
           .input('URL', sql.NVarChar, req.query.url)
           .input('Name', sql.NVarChar, req.query.name)
+          .output('added', sql.Int)
           .execute("gitSteamed.AddItem")
       })
     })
-
+    app.post('api/admin/update/bundle', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.Int, req.query.bundleId)
+          .input('FinalPrice', sql.Int, req.query.finalPrice)
+          .input('DiscountedPrice', sql.Int, req.query.discountedPrice)
+          .execute("gitSteamed.UpdateBundlePrice")
+      })
+    })
+    app.post('api/admin/archive/reviews', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('ReviewID', sql.Int, req.query.reviewId)
+          .output('archived', sql.Int)
+          .execute("gitSteamed.ArchiveReview")
+      })
+    })
+    app.post('api/admin/add/genre', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('GenreName', sql.NVarChar, req.query.genreName)
+          .input('ItemID', sql.Int, req.query.itemId)
+          .execute("gitSteamed.AddGenreToItem")
+      })
+    })
 
   }
 }
