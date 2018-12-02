@@ -167,7 +167,7 @@ module.exports = {
           .input('Username', sql.NVarChar, req.query.username)
           .input('ItemCount', sql.Int, req.query.itemCount)
           .input('URL', sql.NVarChar, req.query.url)
-          .output('added', sqlInt)
+          .output('added', sql.Int)
           .execute("gitSteamed.AddUser")
       })
     })
@@ -191,7 +191,7 @@ module.exports = {
           .execute("gitSteamed.UpdateBundlePrice")
       })
     })
-    app.post('api/admin//archive/reviews', function(req, res) {
+    app.post('api/admin/archive/reviews', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('ReviewID', sql.Int, req.query.reviewId)
