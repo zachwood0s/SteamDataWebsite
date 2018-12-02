@@ -12,6 +12,10 @@
         router-link.nav-link.color-base7.h-bg-base6.h-color-base2(
           :to="{path: '/'}"
         ) Games
+      li.nav-item.active
+        router-link.nav-link.color-base7.h-bg-base6.h-color-base2(
+          :to="{path: '/'}"
+        ) Bundles
 </template>
 
 <script>

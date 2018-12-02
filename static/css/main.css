@@ -88,20 +88,22 @@ a:hover{
     margin-top:0%;
 }
 
-#usersList li{
+.list-group li{
     border-radius:0;
     padding:0 15px;
 }
-#usersList .row div,
-#usersList .row a{
+.list-group li .row div{
     box-sizing: border-box;
     padding:10px;
     transition:padding 6px, border .3s;
 }
 
-#usersList .row a:hover{
+.list-group li .row a:hover{
     padding:6px;
     border:4px solid rgba(0, 0, 0, .1);
+}
+.list-group .viewProfile{
+  padding:10px;
 }
 .carousel{
     overflow:visible;

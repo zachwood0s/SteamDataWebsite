@@ -11,7 +11,9 @@
             )
       .row.justify-content-md-center
         .col.text-center.ft-medium Search for a Steam Username
-      .row.justify-content-md-center.my-5
+      .row.justify-content-md-center.mt-2(v-if="resultCount != 0")
+        h6.color-base1.font-weight-bold Returned {{resultCount}} users
+      .row.justify-content-md-center.my-2
         ul.list-group.col-md#usersList(
           v-if="users && users.length"
           v-bind:class="{loaded: loaded}"
@@ -36,10 +38,10 @@ export default {
   methods: {
     search () {
       var loader = this.loadMore
-      console.log("no more results: ", this.outOfResults)
       if(this.searchText != this.lastSearchText){
         this.page = 1
         loader = this.loadNew
+        this.outOfResults = false
       }
       else if(this.outOfResults) {
         console.log("Out of results, ignoring")
@@ -71,6 +73,7 @@ export default {
     },
     loadNew (response) {
       this.users = response.data.recordsets[0]
+      this.resultCount = response.data.output.ReturnedCount
     },
     onscroll () {
       var d = document.documentElement
@@ -88,6 +91,10 @@ export default {
   created () {
     window.addEventListener('scroll', this.onscroll)
   },
+  destroyed () {
+    console.log("DESTROY")
+    window.removeEventListener('scroll', this.onscroll)
+  },
   components: {
     NavBar
   },
@@ -100,6 +107,7 @@ export default {
       loaded: false,
       numberToLoad: 50,
       page: 1,
+      resultCount: 0,
       users: [],
       errors: []
     }
