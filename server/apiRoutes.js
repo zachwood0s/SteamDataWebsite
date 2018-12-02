@@ -77,7 +77,7 @@ module.exports = {
     })
 
 
-
+    //Game Routes
     app.get('/api/games', function(req, res) {
       var resultCount = 10;
       var pageNumber = 1;
@@ -148,5 +148,28 @@ module.exports = {
           .execute("gitSteamed.GetGameGenres")
       })
     })
+
+    //Admin Routes
+    app.post('/api/admin/addUsers/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('Username', sql.NVarChar, req.query.username)
+          .input('ItemCount', sql.Int, req.query.itemCount)
+          .input('URL', sql.NVarChar, req.query.url)
+          .execute("gitSteamed.AddUser")
+      })
+    })
+    app.post('/api/admin/addItem/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('Genre', sql.NVarChar, req.query.genre)
+          .input('Price', sql.Int, req.query.price)
+          .input('URL', sql.NVarChar, req.query.url)
+          .input('Name', sql.NVarChar, req.query.name)
+          .execute("gitSteamed.AddItem")
+      })
+    })
+
+
   }
 }
