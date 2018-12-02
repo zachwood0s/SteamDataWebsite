@@ -1,25 +1,31 @@
 
-
-    const config = {
-        colorsHex: [],
-        colorsRGB: [],
-        colorTransition: .2
-    };
-
-    function hexToRgb(hex) {
+const config = {
+    colorsHex: [],
+    colorsRGB: [],
+    colorTransition: .2
+}
+module.exports = {
+    config,
+    hexToRgb(hex) {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
         } : null;
-    }
+    },
 
-    function rgbToRgbaString(rgb, a){
+    getRbgColorsBetween(a, b){
+      return Object.keys(config.colorsRGB.sort())
+                   .map(i => config.colorsRGB[i])
+                   .slice(a, b)
+    },
+
+    rgbToRgbaString(rgb, a){
         return `rgba(${rgb.r},${rgb.g},${rgb.b},${a})`;
-    }
+    },
 
-    function createCssColors() {
+    createCssColors() {
         var style = getComputedStyle(document.body);
         var newStyleSheet = document.createElement('style');
         newStyleSheet.type = 'text/css';
@@ -31,7 +37,7 @@
             color = color.trim().substr(1, color.length - 3);
 
             config.colorsHex[`base${i}`] = color;
-            config.colorsRGB[`base${i}`] = hexToRgb(color);
+            config.colorsRGB[`base${i}`] = this.hexToRgb(color);
 
             styleText += `.bg-base${i}{background:${color};}`;
             styleText += `.color-base${i}{color:${color} !important;}`;
@@ -43,7 +49,7 @@
         newStyleSheet.innerHTML = styleText;
         document.getElementsByTagName('head')[0].appendChild(newStyleSheet);
     }
-    createCssColors();
+}
 /*
     window.onload = function () {
         createCssColors();
