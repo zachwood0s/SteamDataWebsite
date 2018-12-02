@@ -23,7 +23,7 @@
           )
             .row
               .col-10 {{ game.Name }}
-              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/game/'+game.ItemID+'?name='+game.Name }") View Profile
+              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/game/'+game.ItemID+'?name='+game.Name }") View Game
         ul(v-if="errors && errors.length")
           li(v-for="error of errors") {{ error.message }}
 </template>

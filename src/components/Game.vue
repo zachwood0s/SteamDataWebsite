@@ -103,8 +103,8 @@
               .col-7 {{ bundle.Name.substring(0, 50) }} 
                 span(v-if="bundle.Name.length > 50") ...
               .col-3.font-weight-bold ${{ bundle.DiscountPrice.toFixed(2) }} 
-                span.color-base11.ml-1 -{{ Math.round((bundle.FinalPrice - bundle.DiscountPrice) / bundle.FinalPrice * 100) }}% off
-              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/bundle/'+bundle.ItemID }") View Bundle
+                span.color-base11.ml-1.font-weight-bold {{ Math.round((bundle.FinalPrice - bundle.DiscountPrice) / bundle.FinalPrice * 100) }}% off
+              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/bundle/'+bundle.BundleID+'?name='+bundle.Name }") View Bundle
 
       .row.justify-content-md-center.mt-5
         a(href="#reviewsList" data-toggle="collapse")

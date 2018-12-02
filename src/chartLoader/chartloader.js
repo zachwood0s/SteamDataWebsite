@@ -160,6 +160,28 @@ charts["GameRecommendRate"] = function (ctx, data) {
     }
   });
 }
+
+charts["BundleGenres"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'polarArea',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: "Bundles Games by Genre"
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scale: {
+        xAxes: {
+          ticks: {
+            beginAtZero: true
+          }
+        }
+      }
+    }
+  });
+}
 function loadChart(name, ctx, datasets) {
   charts[name](ctx, datasets)
 }

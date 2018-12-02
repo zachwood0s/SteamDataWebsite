@@ -149,6 +149,43 @@ module.exports = {
       })
     })
 
+    //Bundle Routes
+    app.get('/api/bundles', function(req, res) {
+      var resultCount = 10;
+      var pageNumber = 1;
+      if(req.query.pageNumber) pageNumber = req.query.pageNumber;
+      if(req.query.resultCount) resultCount = req.query.resultCount;
+      runQuery(res, pool => {
+        return pool.request()
+          .input('LookupString', sql.NVarChar, req.query.name)
+          .input('ResultCount', sql.Int, resultCount)
+          .input('PageNumber', sql.Int, pageNumber)
+          .output('ReturnedCount', sql.Int)
+          .execute("gitSteamed.SearchBundle")
+      });
+    })
+    app.get('/api/bundleGames/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleGames")
+      })
+    })
+    app.get('/api/bundleStats/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleStats")
+      })
+    })
+    app.get('/api/bundleGenres/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleGenreLayout")
+      })
+    })
+
     //Admin Routes
     app.post('/api/admin/addUsers/', function(req, res) {
       runQuery(res, pool => {

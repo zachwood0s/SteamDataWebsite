@@ -68,7 +68,7 @@ export default new Router({
       component: BundleSearch
     },
     {
-      path: '/bundle/:itemID',
+      path: '/bundle/:bundleID',
       name: 'Bundle',
       component: Bundle
     }

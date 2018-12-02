@@ -98,10 +98,11 @@ a:hover{
     transition:padding 6px, border .3s;
 }
 
-.list-group li .row a:hover{
+.list-group li .row a:not(.nohover):hover{
     padding:6px;
     border:4px solid rgba(0, 0, 0, .1);
 }
+
 .list-group .viewProfile{
   padding:10px;
   position:absolute;
