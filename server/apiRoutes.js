@@ -199,9 +199,7 @@ module.exports = {
     app.post('/api/admin/add/user', function(req, res) {
       sql.connect().then(pool => {
         return pool.request()
-          .input('Username', sql.NVarChar, req.query.username)
-          .input('ItemCount', sql.Int, req.query.itemCount)
-          .input('URL', sql.NVarChar, req.query.url)
+          .input('username', sql.NVarChar, req.query.username)
           .output('added', sql.Int)
           .execute("gitSteamed.AddUser")
       }).then(result => {
@@ -252,15 +250,15 @@ module.exports = {
           console.dir(err);
       })*/
     })
-    app.post('api/admin/update/bundle', function(req, res) {
+    app.post('/api/admin/update/bundle', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('BundleID', sql.Int, req.query.bundleId)
-          .input('DiscountedPrice', sql.Int, req.query.discountedPrice)
+          .input('DiscountedPrice', sql.Float, parseFloat(req.query.discountedPrice))
           .execute("gitSteamed.UpdateBundlePrice")
       })
     })
-    app.post('api/admin/archive/reviews', function(req, res) {
+    app.post('/api/admin/archive/reviews', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('ReviewID', sql.Int, req.query.reviewId)
@@ -268,7 +266,7 @@ module.exports = {
           .execute("gitSteamed.ArchiveReview")
       })
     })
-    app.post('api/admin/add/genre', function(req, res) {
+    app.post('/api/admin/add/genre', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('GenreName', sql.NVarChar, req.query.genreName)
@@ -276,6 +274,22 @@ module.exports = {
           .execute("gitSteamed.AddGenreToItem")
       })
     })
+
+    // Review Routes
+    app.get('/api/reviews', function(req, res) {
+     var resultCount = 10;
+     var pageNumber = 1;
+     if(req.query.pageNumber) pageNumber = req.query.pageNumber;
+     if(req.query.resultCount) resultCount = req.query.resultCount;
+     runQuery(res, pool => {
+       return pool.request()
+         .input('LookupString', sql.NVarChar, req.query.name)
+         .input('ResultCount', sql.Int, resultCount)
+         .input('PageNumber', sql.Int, pageNumber)
+         .output('ReturnedCount', sql.Int)
+         .execute("gitSteamed.SearchReview")
+     })
+   })
 
     // Top 10
     app.get('/api/top10/users/playtime/', function(req, res) {
