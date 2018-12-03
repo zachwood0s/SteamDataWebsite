@@ -182,6 +182,142 @@ charts["BundleGenres"] = function (ctx, data) {
     }
   });
 }
+
+charts["PopularGamesNow"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'bubble',
+    data: data,
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      title: {
+        display: true,
+        text: 'Most Popular Games Being Played'
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+    }
+  });
+}
+
+charts["GameGenres"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'polarArea',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'All Games by Genre'
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          display: false
+        }],
+        yAxes: [{
+          display: false
+        }]
+      },
+    }
+  });
+}
+
+charts["OverallTopGames"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'horizontalBar',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'Top 10 Games by Playtime'
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  });
+}
+
+charts["MostRecoOverall"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'Top 5 Most Recommended Games'
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  });
+}
+
+charts["TopBundles"] = function (ctx, data) {
+  return new Chart(ctx, {
+    type: 'horizontalBar',
+    data: data,
+    options: {
+      title: {
+        display: true,
+        text: 'Top 10 Bundles by Playtime'
+      },
+      responsive: false,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            display: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false
+          }
+        }]
+      }
+    }
+  });
+}
+
 function loadChart(name, ctx, datasets) {
   charts[name](ctx, datasets)
 }
