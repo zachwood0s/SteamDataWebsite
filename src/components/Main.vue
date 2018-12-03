@@ -32,6 +32,23 @@ div
             )
               span.carousel-control-next-icon(aria-hidden="true")
               span.sr-only Next
+  
+  .row.justify-content-center
+    h1.color-base2 Funniest Review
+  //.row.justify-content-center
+    .card
+      .card-body
+        router-link(:to="{path: '/game/'+review.ItemID+'?name='+funniestReview.Game}")
+          h5.card-title.color-base2.font-weight-bold {{ funniestReview.Game }}
+        h6.card-subtitle.mb-2.color-base4 {{ funniestReview.PostedOn}} 
+          span.color-base5.font-italic (Last Edited: {{ funniestReview.LastEdited }})
+        .card-text {{ funniestReview.Description }}
+      .card-footer
+        .row.justify-content-md-center
+          .col-2.font-weight-bold Funny: {{ funniestReview.Funny }}
+          .col-2.font-weight-bold Helpful: {{ funniestReview.Helpful }}
+          .col-3.color-base11.font-weight-bold(v-if="funniestReview.Recommend") Would Recommend
+          .col-3.color-base8.font-weight-bold(v-else) Would NOT Recommend
                   
 
 </div>
@@ -42,6 +59,7 @@ div
 import axios from "axios"
 import NavBar from "@/components/NavBar.vue"
 import Chart from "@/components/Chart.vue"
+import colorConfig from "../../static/js/colorSetup.js"
 
 export default {
   name: "Main",
@@ -66,7 +84,8 @@ export default {
       },
       genreTotals: [],
       funniestReview: {},
-      helpfulReview: {}
+      helpfulReview: {},
+      rgbaColors: []
     }
   },
   methods: {
@@ -91,7 +110,7 @@ export default {
                    funniestReviewPromise,
                    helpfulReviewPromise])
       .then(result => {
-        [up, ip, ir, io, iu, irec, gt, fr, hr] = result
+        const [up, ip, ir, io, iu, irec, gt, fr, hr] = result
         if(up.data.recordsets) this.top10.users.playtime = up.data.recordsets[0]
         if(ip.data.recordsets) this.top10.items.playtime = ip.data.recordsets[0]
         if(ir.data.recordsets) this.top10.items.reviews = ir.data.recordsets[0]
@@ -106,63 +125,27 @@ export default {
       });
     },
     loadCharts() {
+      this.rgbaColors = colorConfig.getRbgColorsBetween(8, 15)
+        .map(i => colorConfig.rgbToRgbaString(i, .7))
       this.charts = [
         this.loadGameGenres(),
-        this.loadPopularGamesNow(),
         this.loadTopGames(),
         this.loadMostRecommended(),
-        this.loadTopBundles()
       ]
     },
     loadGameGenres(){
+      this.genreTotals.sort(function() {
+        return .5 - Math.random();
+      })
       return {
         name: "GameGenres",
         data: {
-          labels: ["RPG", "Action", "FPS", "Puzzle", "Strategy", "Arcade", "Multiplayer"],
+          labels: this.genreTotals.map(i => i.Name),
           datasets: [{
             label: 'All Games by Genre',
-            data: [5012, 9635, 15983, 2398, 4122, 5199, 10229],
-            backgroundColor: [
-              'rgba(255, 99, 132, .7)',
-              'rgba(54, 162, 235, .7)',
-              'rgba(255, 206, 86, .7)',
-              'rgba(75, 192, 192, .7)',
-              'rgba(153, 102, 255, .7)',
-              'rgba(255, 159, 64, .7)',
-              'rgba(200, 172, 64, .7)'
-            ]
+            data: this.genreTotals.map(i => i.Totals),
+            backgroundColor: this.rgbaColors
           }]
-        }
-      }
-    },
-    loadPopularGamesNow(){
-      return {
-        name: "PopularGamesNow",
-        data:  {
-          label: 'Popular Games Being Played Now!!!!',
-          datasets: [
-            {
-              label: ["Red Dead Redemption 2"],
-              backgroundColor: 'rgba(170,160,64,0.6)',
-              data: [{ x: 1200, y: 1400, r: 30 }]
-            },
-            {
-              label: ["Fortnite"],
-              backgroundColor: 'rgba(255,0,0,0.6)',
-              data: [{ x: 500, y: 1700, r: 24 }]
-            },
-            {
-              label: ["League of Legends"],
-              backgroundColor: 'rgba(0,200,0,0.6)',
-              data: [{ x: 906, y: 1000, r: 24 }]
-            },
-            {
-              label: ["Starcraft II"],
-              backgroundColor: 'rgba(100,100,50,0.6)',
-              data: [{ x: 100, y: 300, r: 24 }]
-            },
-
-          ]
         }
       }
     },
@@ -170,13 +153,11 @@ export default {
       return {
         name: "OverallTopGames",
         data:  {
-          labels: ["Starcraft II", "League of Legends", "CS:GO", "PUBG", "Runescape", "WoW", "Factorio", "Black Desert", "Illegally downloaded Minecraft", "Terraria"],
+          labels: this.top10.items.playtime.map(i => i.Name),
           datasets: [{
             label: "Playtime",
-            data: [1294, 1134, 976, 785, 780, 654, 345, 300, 189, 100, 50],
-            backgroundColor: [
-              '#CA626C', '#CA5F98', '#C25FCA', '#995FCA', '#5886CA', '#59BBCA', '#58CA9E', '#5BCA73', '#A3CA5B', '#CAAA62'
-            ]
+            data: this.top10.items.playtime.map(i => i.Value),
+            backgroundColor: this.rgbaColors 
           }]
         }
       }
@@ -185,35 +166,25 @@ export default {
       return {
         name: "MostRecoOverall",
         data: {
-          labels: ["Starcraft II", "League of Legends", "CS:GO", "PUBG", "Runescape"],
+          labels: this.top10.items.recommended.map(i => i.Name),
           datasets: [{
             label: "Recommendations",
-            data: [1294, 1134, 976, 785, 780, 654, 345, 300, 189, 100, 50],
-            backgroundColor: [
-              '#CA626C', '#CA5F98', '#C25FCA', '#995FCA', '#5886CA'
-            ]
+            data: this.top10.items.recommended.map(i => i.Value),
+            backgroundColor: this.rgbaColors 
           }]
         }
       }
     },
-    loadTopBundles(){
-      return {
-        name: "TopBundles",
-        data:  {
-          labels: ["Bundle1", "Bundle2", "Bundle3", "Bundle4", "Bundle5", "Bundle6", "Bundle7", "Bundle8", "Bundle9", "Bundle10"],
-          datasets: [{
-            label: "Playtime",
-            data: [1294, 1134, 976, 785, 780, 654, 345, 300, 189, 100, 50],
-            backgroundColor: [
-              '#CA626C', '#CA5F98', '#C25FCA', '#995FCA', '#5886CA', '#59BBCA', '#58CA9E', '#5BCA73', '#A3CA5B', '#CAAA62'
-            ]
-          }]
-        }
-      }
-    }
   },
   created(){
     this.loadData()
+
+    axios.post('/api/admin/add/item?name=joe&price=1.0&url=google.com')
+    .then(response => {
+      console.log(response)
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>

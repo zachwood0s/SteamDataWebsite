@@ -197,25 +197,60 @@ module.exports = {
       })
     })
     app.post('/api/admin/add/user', function(req, res) {
-      runQuery(res, pool => {
+      sql.connect().then(pool => {
         return pool.request()
           .input('Username', sql.NVarChar, req.query.username)
           .input('ItemCount', sql.Int, req.query.itemCount)
           .input('URL', sql.NVarChar, req.query.url)
           .output('added', sql.Int)
           .execute("gitSteamed.AddUser")
+      }).then(result => {
+          res.send(result);
+      }).catch(err => {
+          res.send(err);
+          console.dir(err);
       })
     })
-    app.post('/api/admin/add/item/', function(req, res) {
+    app.post('/api/admin/add/admin/', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
-          .input('Genre', sql.NVarChar, req.query.genre)
-          .input('Price', sql.Int, req.query.price)
-          .input('URL', sql.NVarChar, req.query.url)
-          .input('Name', sql.NVarChar, req.query.name)
-          .output('added', sql.Int)
-          .execute("gitSteamed.AddItem")
-      })
+          .input('username', sql.NVarChar, "joe joe")
+          .input('password', sql.NVarChar, "password")
+          .execute('gitSteamed.AddAdmin')
+      });
+    })
+    app.post('/api/admin/add/item/', function(req, res) {
+      console.log(res.query)
+      runQuery(res, pool => {
+        return pool.request()
+          .input('price', sql.Float, req.query.price)
+          .input('name', sql.NVarChar, req.query.name)
+          .input('url', sql.NVarChar, req.query.url)
+          .execute('gitSteamed.AddItem')
+      });
+     /* 
+      new sql.ConnectionPool(dbconfig).connect().then(pool => {
+        var trans = new sql.Transaction(pool)
+        trans.begin().then(() => {
+          new sql.Request(trans)
+            .input('price', sql.Float, parseFloat(req.query.price))
+            .input('url', sql.NVarChar, req.query.url)
+            .input('name', sql.NVarChar, req.query.name)
+            .output('added', sql.Int)
+            .execute("gitSteamed.AddItem").then(() => {
+              trans.commit().catch(err => {
+                console.log("Error in transaction commit: "+err)
+              });
+            }).then(result => {
+              res.send(result)
+            })
+        }).catch(err => {
+          console.log(err)
+        })
+      }).catch(err => {
+          res.send(err);
+          console.dir(err);
+      })*/
     })
     app.post('api/admin/update/bundle', function(req, res) {
       runQuery(res, pool => {
