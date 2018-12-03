@@ -39,6 +39,7 @@ div
 </template>
 
 <script>
+import axios from "axios"
 import NavBar from "@/components/NavBar.vue"
 import Chart from "@/components/Chart.vue"
 
@@ -50,12 +51,59 @@ export default {
   },
   data () {
     return {
-      charts: []
+      charts: [],
+      top10: {
+        users: {
+          playtime: []
+        },
+        items: {
+          playtime: [],
+          reviews: [],
+          owners: [],
+          users: [],
+          recommended: []
+        }
+      },
+      genreTotals: [],
+      funniestReview: {},
+      helpfulReview: {}
     }
   },
   methods: {
-    loadData(){
-      this.loadCharts()
+    async loadData(){
+      const usersPlaytimePromise = axios(`/api/top10/users/playtime`)
+      const itemPlaytimePromise = axios(`/api/top10/items/playtime`)
+      const itemReviewsPromise = axios(`/api/top10/items/reviews`)
+      const itemOwnersPromise = axios(`/api/top10/items/owners`)
+      const itemUsersPromise = axios(`/api/top10/items/users`)
+      const itemRecommendedPromise = axios(`/api/top10/items/recommended`)
+      const genreTotalsPromise = axios(`/api/genreTotals`)
+      const funniestReviewPromise = axios(`/api/funniestReview`)
+      const helpfulReviewPromise = axios(`/api/helpfulReview`)
+
+      Promise.all([usersPlaytimePromise, 
+                   itemPlaytimePromise,
+                   itemReviewsPromise,
+                   itemOwnersPromise,
+                   itemUsersPromise,
+                   itemRecommendedPromise,
+                   genreTotalsPromise,
+                   funniestReviewPromise,
+                   helpfulReviewPromise])
+      .then(result => {
+        [up, ip, ir, io, iu, irec, gt, fr, hr] = result
+        if(up.data.recordsets) this.top10.users.playtime = up.data.recordsets[0]
+        if(ip.data.recordsets) this.top10.items.playtime = ip.data.recordsets[0]
+        if(ir.data.recordsets) this.top10.items.reviews = ir.data.recordsets[0]
+        if(io.data.recordsets) this.top10.items.owners = io.data.recordsets[0]
+        if(iu.data.recordsets) this.top10.items.users = iu.data.recordsets[0]
+        if(irec.data.recordsets) this.top10.items.recommended = irec.data.recordsets[0]
+        if(gt.data.recordsets) this.genreTotals = gt.data.recordsets[0]
+        if(fr.data.recordsets) this.funniestReview = fr.data.recordsets[0][0]
+        if(hr.data.recordsets) this.helpfulReview = hr.data.recordsets[0][0]
+
+        this.loadCharts()
+      });
     },
     loadCharts() {
       this.charts = [
