@@ -12,7 +12,7 @@
       .row.justify-content-md-center
         .col.text-center.ft-medium Search for a Steam Bundle
       .row.justify-content-md-center.mt-2(v-if="resultCount != 0")
-        h6.color-base1.font-weight-bold Returned {{resultCount}} users
+        h6.color-base1.font-weight-bold Returned {{resultCount}} bundles
       .row.justify-content-md-center.my-2
         ul.list-group.col-md#usersList(
           v-if="bundles && bundles.length"
@@ -23,7 +23,7 @@
           )
             .row
               .col-10 {{ bundle.Name }}
-              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/bundle/'+bundle.ItemID }") View Bundle
+              router-link.col-2.font-weight-bold.bg-base9.color-base6.h-100.viewProfile.text-center(:to="{path: '/bundle/'+bundle.BundleID+'?name='+bundle.Name }") View Bundle
         ul(v-if="errors && errors.length")
           li(v-for="error of errors") {{ error.message }}
 </template>
@@ -92,7 +92,6 @@ export default {
     window.addEventListener('scroll', this.onscroll)
   },
   destroyed () {
-    console.log("DESTROY")
     window.removeEventListener('scroll', this.onscroll)
   },
   components: {

@@ -149,7 +149,42 @@ module.exports = {
       })
     })
 
-    
+    //Bundle Routes
+    app.get('/api/bundles', function(req, res) {
+      var resultCount = 10;
+      var pageNumber = 1;
+      if(req.query.pageNumber) pageNumber = req.query.pageNumber;
+      if(req.query.resultCount) resultCount = req.query.resultCount;
+      runQuery(res, pool => {
+        return pool.request()
+          .input('LookupString', sql.NVarChar, req.query.name)
+          .input('ResultCount', sql.Int, resultCount)
+          .input('PageNumber', sql.Int, pageNumber)
+          .output('ReturnedCount', sql.Int)
+          .execute("gitSteamed.SearchBundle")
+      });
+    })
+    app.get('/api/bundleGames/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleGames")
+      })
+    })
+    app.get('/api/bundleStats/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleStats")
+      })
+    })
+    app.get('/api/bundleGenres/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .input('BundleID', sql.NVarChar, req.query.bundleID)
+          .execute("gitSteamed.GetBundleGenreLayout")
+      })
+    })
 
     //Admin Routes
     app.get('/api/admin/login', function(req, res) {
@@ -183,7 +218,6 @@ module.exports = {
       runQuery(res, pool => {
         return pool.request()
           .input('BundleID', sql.Int, req.query.bundleId)
-          .input('FinalPrice', sql.Float, parseFloat(req.query.finalPrice))
           .input('DiscountedPrice', sql.Float, parseFloat(req.query.discountedPrice))
           .execute("gitSteamed.UpdateBundlePrice")
       })
@@ -205,5 +239,60 @@ module.exports = {
       })
     })
 
+    // Top 10
+    app.get('/api/top10/users/playtime/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10UsersPlaytime")
+      })
+    })
+    app.get('/api/top10/items/playtime/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10ItemsPlaytime")
+      })
+    })
+    app.get('/api/top10/items/reviews/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10ItemsReviews")
+      })
+    })
+    app.get('/api/top10/items/owners/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10ItemsOwners")
+      })
+    })
+    app.get('/api/top10/items/users/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10ItemsUsers")
+      })
+    })
+    app.get('/api/top10/items/recommended/', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetTop10RecommendedGames")
+      })
+    })
+    app.get('/api/genreTotals', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetGenreTotals")
+      })
+    })
+    app.get('/api/funniestReview', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetFunniestReview")
+      })
+    })
+    app.get('/api/helpfulReview', function(req, res) {
+      runQuery(res, pool => {
+        return pool.request()
+          .execute("gitSteamed.GetMostHelpfulReview")
+      })
+    })
   }
 }
