@@ -1,8 +1,11 @@
 <template>
   <div>
     <NavBar/>
-    <div class="alert alert-danger" role="alert" v-if="!valid">
-      Incorrect Login Credentials
+    <div class="alert alert-danger" role="alert" v-if="!userNotAdded">
+      Error: Cannot add user
+    </div>
+    <div class="alert alert-primary" role="alert" v-if="userAdded">
+      Successfully added user!
     </div>
     <div class="container">
       <div class="row">
@@ -36,7 +39,8 @@ export default {
           input: {
               username: "",
           },
-          valid:true
+          userAdded: false, 
+          userNotAdded: true
       }
   },
   methods: {
@@ -44,18 +48,19 @@ export default {
       if(this.input.username != "") {
         axios.post(`/api/admin/add/user?username=${this.username}`)
           .then(response => {
+          console.log("got response", response)
             if(response.data.output.added == 1){
-              this.$router.push({path: "/admin/reviews"})
+              this.userAdded=true
             } else{
               // not added - show "user already exists"
-              this.valid=false
+              this.userNotAdded=false
             }
           })
           .catch(e => {
-            this.valid = false
+            this.userNotAdded=false
           })
         } else {
-            this.valid = false
+          this.userNotAdded=false
         }
       }
   },

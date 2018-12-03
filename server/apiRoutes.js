@@ -214,7 +214,7 @@ module.exports = {
           .execute("gitSteamed.AddItem")
       })
     })
-    app.post('api/admin/update/bundle', function(req, res) {
+    app.post('/api/admin/update/bundle', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('BundleID', sql.Int, req.query.bundleId)
@@ -222,7 +222,7 @@ module.exports = {
           .execute("gitSteamed.UpdateBundlePrice")
       })
     })
-    app.post('api/admin/archive/reviews', function(req, res) {
+    app.post('/api/admin/archive/reviews', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('ReviewID', sql.Int, req.query.reviewId)
@@ -230,7 +230,7 @@ module.exports = {
           .execute("gitSteamed.ArchiveReview")
       })
     })
-    app.post('api/admin/add/genre', function(req, res) {
+    app.post('/api/admin/add/genre', function(req, res) {
       runQuery(res, pool => {
         return pool.request()
           .input('GenreName', sql.NVarChar, req.query.genreName)
@@ -238,6 +238,22 @@ module.exports = {
           .execute("gitSteamed.AddGenreToItem")
       })
     })
+
+    // Review Routes
+    app.get('/api/reviews', function(req, res) {
+     var resultCount = 10;
+     var pageNumber = 1;
+     if(req.query.pageNumber) pageNumber = req.query.pageNumber;
+     if(req.query.resultCount) resultCount = req.query.resultCount;
+     runQuery(res, pool => {
+       return pool.request()
+         .input('LookupString', sql.NVarChar, req.query.name)
+         .input('ResultCount', sql.Int, resultCount)
+         .input('PageNumber', sql.Int, pageNumber)
+         .output('ReturnedCount', sql.Int)
+         .execute("gitSteamed.SearchReview")
+     })
+   })
 
     // Top 10
     app.get('/api/top10/users/playtime/', function(req, res) {

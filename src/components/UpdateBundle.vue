@@ -5,9 +5,9 @@ div
         .row
             .col-sm
             .col-sm
-                h1.text-align-center Update Bundle
+                h1.text-center Update A Bundle
                 .form-group#searchBundle
-                    label(for="Bundle") Search a Bundle
+                    label(for="Bundle") Search Bundles:
                     input.form-control(type="text" name="Bundle" v-on:keyup.enter="search" v-model="searchText")
             .col-sm
         .row.justify-content-md-center.my-2
@@ -72,10 +72,6 @@ export default {
         .catch(e => {
             console.log(error);
         });
-
-
-
-
     },
     search () {
       var loader = this.loadMore
