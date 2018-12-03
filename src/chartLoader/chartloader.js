@@ -273,6 +273,9 @@ charts["MostRecoOverall"] = function (ctx, data) {
         xAxes: [{
           gridLines: {
             display: false
+          },
+          ticks: {
+            autoSkip: false
           }
         }],
         yAxes: [{

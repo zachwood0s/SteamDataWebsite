@@ -32,6 +32,8 @@ div
                         span(area-hidden = "true") &times;
                 .modal-body Update {{selectBundleName}}'s Price:
                     input.form-control(type="text" name="newPrice" v-bind:placeholder="selectDiscountPrice" id="updateText" v-model="updateText")
+                    span.color-base11(v-if="updated && validUpdate") Successfully Updated
+                    span.color-base8(v-if="updated && !validUpdate") Update Failed
                 .modal-footer
                     button.btn.btn-secondary(data-dismiss="modal") Close
                     button.btn.btn-primary(value="Input" v-on:click="update") Save Changes                
@@ -61,12 +63,15 @@ export default {
     update(){
 
         console.log(this.updateText)
-        axios.post('/api/admin/update/bundle', {
-            bundleId: this.selectBundleID,
-            discountedPrice: updateText
-        })
+        axios.post(`/api/admin/update/bundle?bundleId=${this.selectBundleID}&discountedPrice=${this.updateText}`)
         .then(response => {
-            
+            if(response.data.output.valid == 1) {
+              this.validUpdate = true
+            }
+            else{
+              this.validUpdate = false
+            }
+            this.updated = true
             console.log(response);
         })
         .catch(e => {
@@ -141,7 +146,9 @@ export default {
       errors: [],
       selectBundleID: 0,
       selectBundleName: '',
-      selectDiscountPrice: 0
+      selectDiscountPrice: 0,
+      validUpdate: false,
+      updated: false
     }
   },
 

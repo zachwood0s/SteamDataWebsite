@@ -250,10 +250,12 @@ module.exports = {
         return pool.request()
           .input('BundleID', sql.Int, req.query.bundleId)
           .input('DiscountedPrice', sql.Float, parseFloat(req.query.discountedPrice))
+          .output('valid', sql.Int)
           .execute("gitSteamed.UpdateBundlePrice")
       })
     })
     app.post('/api/admin/archive/reviews', function(req, res) {
+      console.log(req.query)
       runQuery(res, pool => {
         return pool.request()
           .input('ReviewID', sql.Int, req.query.reviewId)

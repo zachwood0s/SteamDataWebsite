@@ -68,11 +68,13 @@
 
      archive (review) {
       console.log(review)
-      axios.post(`/api/admin/archive/reviews`, {reviewId: review.ReviewID})
+      axios.post(`/api/admin/archive/reviews?reviewId=${review.ReviewID}`)
         .then(response => {
           console.log("got response", response)
           if(response.data.output.archived == 1){
             this.archived=true
+            this.lastSearchText = ""
+            this.search()
           } else{
             this.notArchived=false
           }
@@ -113,7 +115,7 @@
        searchText: '',
        searching: false,
        loaded: false,
-       numberToLoad: 50,
+       numberToLoad: 10,
        page: 1,
        users: [],
        errors: [],

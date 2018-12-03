@@ -2,7 +2,7 @@
 div
   NavBar
   .container-fluid
-    .row.justify-content-center(v-if="charts && charts.length")
+    .row.justify-content-center.mt-3(v-if="charts && charts.length")
       .col-8
         #carousel.carousel.slide.mt-3
           .carousel-inner
@@ -33,22 +33,41 @@ div
               span.carousel-control-next-icon(aria-hidden="true")
               span.sr-only Next
   
-  .row.justify-content-center
+  .row.justify-content-center.mt-5
     h1.color-base2 Funniest Review
-  //.row.justify-content-center
-    .card
-      .card-body
-        router-link(:to="{path: '/game/'+review.ItemID+'?name='+funniestReview.Game}")
-          h5.card-title.color-base2.font-weight-bold {{ funniestReview.Game }}
-        h6.card-subtitle.mb-2.color-base4 {{ funniestReview.PostedOn}} 
-          span.color-base5.font-italic (Last Edited: {{ funniestReview.LastEdited }})
-        .card-text {{ funniestReview.Description }}
-      .card-footer
-        .row.justify-content-md-center
-          .col-2.font-weight-bold Funny: {{ funniestReview.Funny }}
-          .col-2.font-weight-bold Helpful: {{ funniestReview.Helpful }}
-          .col-3.color-base11.font-weight-bold(v-if="funniestReview.Recommend") Would Recommend
-          .col-3.color-base8.font-weight-bold(v-else) Would NOT Recommend
+  .row.justify-content-center(v-if="funniestReview")
+    .col-8
+      .card
+        .card-body
+          router-link(:to="{path: '/game/'+funniestReview.ItemID+'?name='+funniestReview.Game}")
+            h5.card-title.color-base2.font-weight-bold {{ funniestReview.Name }}: {{funniestReview.Username}}
+          h6.card-subtitle.mb-2.color-base4 {{ funniestReview.PostedOn}} 
+            span.color-base5.font-italic (Last Edited: {{ funniestReview.LastEdited }})
+          .card-text {{ funniestReview.Description }}
+        .card-footer
+          .row.justify-content-md-center
+            .col-2.font-weight-bold Funny: {{ funniestReview.Funny }}
+            .col-2.font-weight-bold Helpful: {{ funniestReview.Helpful }}
+            .col-3.color-base11.font-weight-bold(v-if="funniestReview.Recommend") Would Recommend
+            .col-3.color-base8.font-weight-bold(v-else) Would NOT Recommend
+
+  .row.justify-content-center.mt-5
+    h1.color-base2 Most Helpful Review
+  .row.justify-content-center.mb-5(v-if="helpfulReview")
+    .col-8
+      .card
+        .card-body
+          router-link(:to="{path: '/game/'+helpfulReview.ItemID+'?name='+funniestReview.Game}")
+            h5.card-title.color-base2.font-weight-bold {{ helpfulReview.Name }}: {{helpfulReview.Username}}
+          h6.card-subtitle.mb-2.color-base4 {{ helpfulReview.PostedOn}} 
+            span.color-base5.font-italic (Last Edited: {{ helpfulReview.LastEdited }})
+          .card-text {{ helpfulReview.Description }}
+        .card-footer
+          .row.justify-content-md-center
+            .col-2.font-weight-bold Funny: {{ helpfulReview.Funny }}
+            .col-2.font-weight-bold Helpful: {{ helpfulReview.Helpful }}
+            .col-3.color-base11.font-weight-bold(v-if="helpfulReview.Recommend") Would Recommend
+            .col-3.color-base8.font-weight-bold(v-else) Would NOT Recommend
                   
 
 </div>
@@ -134,16 +153,16 @@ export default {
       ]
     },
     loadGameGenres(){
-      this.genreTotals.sort(function() {
+      var genres = this.genreTotals.slice(0, 7).sort(function() {
         return .5 - Math.random();
       })
       return {
         name: "GameGenres",
         data: {
-          labels: this.genreTotals.map(i => i.Name),
+          labels: genres.map(i => i.Name),
           datasets: [{
-            label: 'All Games by Genre',
-            data: this.genreTotals.map(i => i.Totals),
+            label: 'All Games by Top 7 Genres',
+            data: genres.map(i => i.Totals),
             backgroundColor: this.rgbaColors
           }]
         }
@@ -163,13 +182,14 @@ export default {
       }
     },
     loadMostRecommended(){
+      console.log(this.top10.items.recommended)
       return {
         name: "MostRecoOverall",
         data: {
           labels: this.top10.items.recommended.map(i => i.Name),
           datasets: [{
             label: "Recommendations",
-            data: this.top10.items.recommended.map(i => i.Value),
+            data: this.top10.items.recommended.map(i => i.Recommended),
             backgroundColor: this.rgbaColors 
           }]
         }
