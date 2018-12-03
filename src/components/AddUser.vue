@@ -46,7 +46,7 @@ export default {
   methods: {
     addUser() {
       if(this.input.username != "") {
-        axios.post(`/api/admin/add/user?username=${this.username}`)
+        axios.post(`/api/admin/add/user?username=${this.input.username}`)
           .then(response => {
           console.log("got response", response)
             if(response.data.output.added == 1){

@@ -197,17 +197,13 @@ module.exports = {
       })
     })
     app.post('/api/admin/add/user', function(req, res) {
-      sql.connect().then(pool => {
+      console.log(req.query)
+      runQuery(res, pool => {
         return pool.request()
           .input('username', sql.NVarChar, req.query.username)
-          .output('added', sql.Int)
-          .execute("gitSteamed.AddUser")
-      }).then(result => {
-          res.send(result);
-      }).catch(err => {
-          res.send(err);
-          console.dir(err);
-      })
+          .output('added')
+          .execute('gitSteamed.AddUser')
+      });
     })
     app.post('/api/admin/add/admin/', function(req, res) {
       runQuery(res, pool => {
@@ -221,9 +217,8 @@ module.exports = {
       console.log(res.query)
       runQuery(res, pool => {
         return pool.request()
-          .input('price', sql.Float, req.query.price)
+          .input('price', sql.Float, parseFloat(req.query.price))
           .input('name', sql.NVarChar, req.query.name)
-          .input('url', sql.NVarChar, req.query.url)
           .execute('gitSteamed.AddItem')
       });
      /* 

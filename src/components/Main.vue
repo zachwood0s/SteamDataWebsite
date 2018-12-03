@@ -178,13 +178,6 @@ export default {
   },
   created(){
     this.loadData()
-
-    axios.post('/api/admin/add/item?name=joe&price=1.0&url=google.com')
-    .then(response => {
-      console.log(response)
-    }).catch(err => {
-      console.log(err)
-    })
   }
 }
 </script>

@@ -52,14 +52,10 @@ export default {
   methods: {
     addGame() {
       if(this.input.Name != "" && this.input.Price) {
-        axios.post(`/api/admin/add/item?name=${this.Name}&price=${this.Price}`)
+        axios.post(`/api/admin/add/item?name=${this.input.Name}&price=${this.input.Price}`)
           .then(response => {
             console.log("got response", response)
-            if(response.data.output.added == 1){
-              this.gameAdded=true
-            } else{
-              this.gameNotAdded=false
-            }
+            this.gameAdded=true
           })
           .catch(e => {
             this.gameNotAdded=false
